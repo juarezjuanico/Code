@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<con:pipelineEntry xmlns:con="http://www.bea.com/wli/sb/pipeline/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<con:pipelineEntry xmlns:con="http://www.bea.com/wli/sb/pipeline/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:con1="http://www.bea.com/wli/sb/stages/config" xmlns:con2="http://www.bea.com/wli/sb/stages/transform/config">
     <con:coreEntry>
         <con:binding type="SOAP" isSoap12="false" xsi:type="con:SoapBindingType">
             <con:wsdl ref="SBProject/Pipeline"/>
@@ -12,5 +12,45 @@
             <con:snippetVersion>1.0</con:snippetVersion>
         </con:xqConfiguration>
     </con:coreEntry>
-    <con:router/>
+    <con:router>
+        <con:pipeline type="request" name="request-a1f171c.N6fb1e570.0.16dd5d289ab.N7eff">
+            <con:stage id="_StageId-a1f171c.N6fb1e570.0.16dd5d289ab.N7efd" name="Stage1">
+                <con:context>
+                    <con1:userNsDecl prefix="pip" namespace="http://xmlns.oracle.com/ServiceBusApplication0/SBProject/Pipeline"/>
+                </con:context>
+                <con:actions>
+                    <con2:assign varName="tmp">
+                        <con1:id>_ActionId-a1f171c.N6fb1e570.0.16dd5d289ab.N7ec9</con1:id>
+                        <con2:expr>
+                            <con1:xqueryText>$body/pip:string</con1:xqueryText>
+                        </con2:expr>
+                    </con2:assign>
+                </con:actions>
+            </con:stage>
+        </con:pipeline>
+        <con:pipeline type="response" name="response-a1f171c.N6fb1e570.0.16dd5d289ab.N7efe">
+            <con:stage id="_StageId-a1f171c.N6fb1e570.0.16dd5d289ab.N7efc" name="Stage1">
+                <con:context>
+                    <con1:userNsDecl prefix="pip" namespace="http://xmlns.oracle.com/ServiceBusApplication0/SBProject/Pipeline"/>
+                </con:context>
+                <con:actions>
+                    <con2:replace varName="body" contents-only="true">
+                        <con1:id>_ActionId-a1f171c.N6fb1e570.0.16dd5d289ab.N7e63</con1:id>
+                        <con2:location>
+                            <con1:xpathText>./pip:string</con1:xpathText>
+                        </con2:location>
+                        <con2:expr>
+                            <con1:xqueryText>$tmp</con1:xqueryText>
+                        </con2:expr>
+                    </con2:replace>
+                </con:actions>
+            </con:stage>
+        </con:pipeline>
+        <con:flow>
+            <con:pipeline-node name="Pipeline Pair Node1">
+                <con:request>request-a1f171c.N6fb1e570.0.16dd5d289ab.N7eff</con:request>
+                <con:response>response-a1f171c.N6fb1e570.0.16dd5d289ab.N7efe</con:response>
+            </con:pipeline-node>
+        </con:flow>
+    </con:router>
 </con:pipelineEntry>
